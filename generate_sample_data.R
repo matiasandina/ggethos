@@ -23,7 +23,7 @@ generate_behaviours <- function(n) {
 wombats_ordered <- tibble(wombat = c("jerry", "pomelo", "speedy", "gimli")) %>%
   mutate(trial = 1:4) %>%
   expand(wombat, trial) %>%
-  mutate(n_observations = round(rnorm(16, mean = 50000, sd = 15000))) %>%
+  mutate(n_observations = round(rnorm(16, mean = 50, sd = 15))) %>%
   mutate(behaviour = lapply(n_observations, generate_behaviours)) %>%
   select(-n_observations) %>%
   unnest(behaviour)
@@ -47,7 +47,7 @@ wombats_seconds <- wombats_frame %>%
 # being given as seconds elapsed since the start of the trial, it is given as a
 # datetime
 wombats_dt <- wombats_seconds %>%
-  nest(seconds, behaviour) %>%
+  nest(data = c(seconds, behaviour)) %>%
   mutate(start_dt = as_datetime(rnorm(n(), 1577880000, 100000000))) %>%
   unnest(data) %>%
   mutate(dt = start_dt + dseconds(seconds)) %>%
