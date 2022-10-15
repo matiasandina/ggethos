@@ -1,38 +1,37 @@
-library(tidyverse)
+library(ggplot2)
+
+# Frames in implied order
 load_all()
-
-# simulate data
-samples <- 50
-subjects <- 4
-sampling_frequency <- 100 # in Hz
-trial_id <- paste0("trial_", sort(rep(1:5, samples/5)))
-df <- tibble::tibble(
-  sample_n = rep(1:samples, subjects),
-  time_sec = sample_n * 1/sampling_frequency,
-  duration_sec = sample(1:10, 200, TRUE) * 0.001,
-  trial_n = rep(trial_id, subjects),
-  id = sort(rep(paste0("id", 1:subjects), samples)),
-  target = sample(LETTERS[1:3],
-                    size = samples*subjects,
-                    replace=TRUE,
-                    prob=c(0.75, 0.15, 0.1))
-) %>%
-  mutate(time_end = time_sec + duration_sec)
-
-# Case with x and xend
-ggplot(df, aes(x = time_sec, xend = time_end, y = id, colour = target)) +
-  geom_ethogram()
-
-# Case with x but no xend (behaviour assumed to continue until next behaviour
-# in the same panel, or until the end of the plot)
-ggplot(df, aes(x = time_sec, y = id, color = target)) +
-  geom_ethogram()
-
-# Case with no x
-ggplot(df, aes(y = id, color = target))+
-  geom_ethogram()
-
-# With faceting
-ggplot(df, aes(x = time_sec, y = trial_n, color = target))+
+ggplot(wombats_ordered, aes(y = wombat, colour = behaviour)) +
   geom_ethogram() +
-  facet_wrap(~id)
+  facet_wrap(~ trial)
+
+# Frames of uniform duration 1
+load_all()
+ggplot(wombats_frame, aes(x = frame, y = wombat, colour = behaviour)) +
+  geom_ethogram() +
+  facet_wrap(~ trial)
+
+# Observations at uniform 5-second intervals
+load_all()
+ggplot(wombats_seconds, aes(x = seconds, y = wombat, colour = behaviour)) +
+  geom_ethogram() +
+  facet_wrap(~ trial)
+
+# Observations at specified datetimes with uniform 5-second intervals
+load_all()
+ggplot(wombats_dt, aes(x = dt, y = wombat, colour = behaviour)) +
+  geom_ethogram() +
+  facet_wrap(wombat ~ trial, scales = "free")
+
+# Observations with specified start and end times, expressed in seconds
+load_all()
+ggplot(wombats_duration, aes(x = start_seconds, xend = end_seconds, y = wombat, colour = behaviour)) +
+  geom_ethogram() +
+  facet_wrap(~ trial)
+
+# Observations with specified start and end times, expressed as datetimes
+load_all()
+ggplot(wombats_duration_dt, aes(x = start_dt, xend = end_dt, y = wombat, colour = behaviour)) +
+  geom_ethogram() +
+  facet_wrap(wombat ~ trial, scales = "free")

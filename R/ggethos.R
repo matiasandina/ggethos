@@ -1,4 +1,4 @@
-StatEtho <- ggproto("StatEtho", Stat, 
+StatEtho <- ggplot2::ggproto("StatEtho", ggplot2::Stat, 
                     compute_panel = function(data, scales) {
 
                       # yend is always y
@@ -9,23 +9,26 @@ StatEtho <- ggproto("StatEtho", Stat,
                       if (all(c("x", "xend") %in% names(data))) {
                         return(data)
 
-                      # If x is provided but not xend, the behavior is assumed
-                      # to continue until the next behaviour starts, or until
-                      # the x axis max limit in the case of the last
-                      # behaviour. This means that some behaviours (those
-                      # with an x value equal to the x axis max limit) will
-                      # not be drawn.
+                      # If x is provided but not xend, behaviours are assumed
+                      # to represent fixed intervals, which will be guessed
+                      # from the smallest interval between provided values.
+                      # In future users will be able to manually override
+                      # this with an explicit value and thus suppress the
+                      # below warning.
                       } else if (("x" %in% names(data)) & (! "xend" %in% names(data))) {
-                        data <- unsplit(lapply(split(data, data$y), function(s) {
-                                          # Sort the data frame by x
-                                          s <- s[order(s$x), ]
 
-                                          # xmax is either the start of the
-                                          # next behavior, or the x axis limit
-                                          s$xend <- c(s$x[-1], scales$x$get_limits()[2]) 
-                                          s
-                                        }),
-                                        data$y)
+                        data <- unsplit(lapply(split(data, data$y), function(d) {
+
+                            d <- d[order(d$x), ]
+                            interval <- min(diff(d$x))
+                            message(
+                              "No observation interval provided, using guessed interval ",
+                              interval
+                            )
+                            d$xend <- d$x + interval
+                            d
+                          }
+                        ), data$y)
 
                       # If no x is provided, behaviours are set to unit width
                       # in the order they appear in the data
