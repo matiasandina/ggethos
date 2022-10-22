@@ -27,15 +27,21 @@ StatEtho <- ggplot2::ggproto("StatEtho", ggplot2::Stat,
                             s$xend <- s$x + interval
 
                             # For efficiency of drawing, runs of identical
-                            # behaviours are collapsed
-                            runs <- rle(s$colour)
-                            s <- do.call("rbind", lapply(1:length(runs$lengths), function(i) {
-                                                     x <- sum(runs$lengths[1:i-1])
-                                                     d <- s[x + 1, ]
-                                                     d$x <- x
-                                                     d$xend <- x + runs$lengths[i]
-                                                     d
-                              }))
+                            # behaviours are collapsed. We will first check to
+                            # ensure that there are no repeated x values in the
+                            # data.
+                            if (! length(s$x) == length(unique(s$x))) {
+                              warning("Some behaviours will be drawn with the same value for 'x' - is this a mistake?")
+                            } else {
+                              runs <- rle(s$colour)
+                              s <- do.call("rbind", lapply(1:length(runs$lengths), function(i) {
+                                                       x <- sum(runs$lengths[1:i-1])
+                                                       d <- s[x + 1, ]
+                                                       d$x <- x
+                                                       d$xend <- x + runs$lengths[i]
+                                                       d
+                                }))
+                            }
                             s
                           }
                         ))
