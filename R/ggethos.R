@@ -20,10 +20,16 @@ StatEtho <- ggplot2::ggproto("StatEtho", ggplot2::Stat,
                         data <- do.call("rbind", lapply(split(data, data$y), function(s) {
 
                             s <- s[order(s$x), ]
-                            interval <- min(diff(s$x))
-                            message( "No observation interval provided, using guessed interval ",
-                              interval
-                            )
+                            diffs <- diff(s$x)
+                            diffs <- diffs[! diffs == 0]
+                            if (length(diffs) > 0) {
+                              interval <- min(diffs)
+                              message("No observation interval provided, using guessed interval ",
+                                interval
+                              )
+                            } else {
+                              stop("No observation interval provided and unable to guess")
+                            }
                             s$xend <- s$x + interval
 
                             # For efficiency of drawing, runs of identical
