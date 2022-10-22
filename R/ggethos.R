@@ -8,6 +8,7 @@ StatEtho <- ggplot2::ggproto("StatEtho", ggplot2::Stat,
                       # directly to GeomSegment
                       if (all(c("x", "xend") %in% names(data))) {
 
+
                       # If x is provided but not xend, behaviours are assumed
                       # to represent fixed intervals, which will be guessed
                       # from the smallest interval between provided values.
@@ -16,43 +17,66 @@ StatEtho <- ggplot2::ggproto("StatEtho", ggplot2::Stat,
                       # below warning.
                       } else if (("x" %in% names(data)) & (! "xend" %in% names(data))) {
 
-                        data <- unsplit(lapply(split(data, data$y), function(d) {
+                        data <- do.call("rbind", lapply(split(data, data$y), function(s) {
 
-                            d <- d[order(d$x), ]
-                            interval <- min(diff(d$x))
+                            s <- s[order(s$x), ]
+                            interval <- min(diff(s$x))
                             message( "No observation interval provided, using guessed interval ",
                               interval
                             )
-                            d$xend <- d$x + interval
-                            d
+                            s$xend <- s$x + interval
+
+                            # For efficiency of drawing, runs of identical
+                            # behaviours are collapsed
+                            runs <- rle(s$colour)
+                            s <- do.call("rbind", lapply(1:length(runs$lengths), function(i) {
+                                                     x <- sum(runs$lengths[1:i-1])
+                                                     d <- s[x + 1, ]
+                                                     d$x <- x
+                                                     d$xend <- x + runs$lengths[i]
+                                                     d
+                              }))
+                            s
                           }
-                        ), data$y)
+                        ))
 
                       # If no x is provided, behaviours are set to unit width
                       # in the order they appear in the data
                       } else if (! "x" %in% names(data)) {
-                        data <- unsplit(lapply(split(data, data$y), function(s) {
+                        data <- do.call("rbind", lapply(split(data, data$y), function(s) {
                                           s$xend <- seq_along(s$y)
                                           s$x <- s$xend - 1
+
+                                          # For efficiency of drawing, runs of identical
+                                          # behaviours are collapsed
+                                          runs <- rle(s$colour)
+                                          s <- do.call("rbind", lapply(1:length(runs$lengths), function(i) {
+                                                              x <- sum(runs$lengths[1:i-1])
+                                                              d <- s[x + 1, ]
+                                                              d$x <- x
+                                                              d$xend <- x + runs$lengths[i]
+                                                              d
+                                          }))
                                           s
-                                        }),
-                                        data$y)
+                                        }))
+
+
                       }
 
-                      # Align trials, if so instructed. NAs are removed after
-                      # alignment, as they are considered to be observations at
-                      # which there was no behaviour.
+                      # Align trials, if so instructed
                       if (align_trials) {
-                        data <- unsplit(lapply(split(data, data$y), function(s) {
+                        data <- do.call("rbind", lapply(split(data, data$y), function(s) {
                                           zero <- min(s$x)
                                           s$x <- s$x - zero
                                           s$xend <- s$xend - zero
                                           s
-                                        }),
-                                        data$y)
+                                        }))
                       }
 
-                      # Remove NA values for colour
+                      # Remove NA values for colour. This is intentionally done
+                      # right at the end, as NA values are considered to be
+                      # observations where no behaviour was observed (rather
+                      # than missing observations).
                       data <- data[which(! is.na(data$colour )), ]
 
                       return(data)
