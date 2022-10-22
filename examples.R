@@ -15,7 +15,7 @@ ggplot(wombats_frame, aes(x = frame, y = wombat, colour = behaviour)) +
 # Observations at uniform 5-second intervals
 load_all()
 ggplot(wombats_seconds, aes(x = seconds, y = wombat, colour = behaviour)) +
-  geom_ethogram() +
+  geom_ethogram(align_trials = TRUE) +
   facet_wrap(~ trial)
 
 # Observations at specified datetimes with uniform 5-second intervals
