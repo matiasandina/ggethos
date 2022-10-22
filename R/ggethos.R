@@ -1,13 +1,17 @@
 StatEtho <- ggplot2::ggproto("StatEtho", ggplot2::Stat, 
                     compute_panel = function(data, scales, align_trials) {
 
+                      # Skip if there is nothing to plot for this panel
+                      if (nrow(data) == 0) {
+                        return(data)
+                      }
+
                       # yend is always y
                       data$yend <- data$y
 
                       # If x and xend are provided, these values are passed
                       # directly to GeomSegment
                       if (all(c("x", "xend") %in% names(data))) {
-
 
                       # If x is provided but not xend, behaviours are assumed
                       # to represent fixed intervals, which will be guessed
@@ -28,7 +32,8 @@ StatEtho <- ggplot2::ggproto("StatEtho", ggplot2::Stat,
                                 interval
                               )
                             } else {
-                              stop("No observation interval provided and unable to guess")
+                              warning("No observation interval provided and unable to guess, some behaviours will not be drawn")
+                              interval <- 0
                             }
                             s$xend <- s$x + interval
 
@@ -38,7 +43,7 @@ StatEtho <- ggplot2::ggproto("StatEtho", ggplot2::Stat,
                             # data.
                             if (! length(s$x) == length(unique(s$x))) {
                               warning("Some behaviours will be drawn with the same value for 'x' - is this a mistake?")
-                            } else {
+                            } else if ("colour" %in% names(s)) {
                               runs <- rle(s$colour)
                               s <- do.call("rbind", lapply(1:length(runs$lengths), function(i) {
                                                        x <- sum(runs$lengths[1:i-1])
@@ -61,14 +66,16 @@ StatEtho <- ggplot2::ggproto("StatEtho", ggplot2::Stat,
 
                                           # For efficiency of drawing, runs of identical
                                           # behaviours are collapsed
-                                          runs <- rle(s$colour)
-                                          s <- do.call("rbind", lapply(1:length(runs$lengths), function(i) {
-                                                              x <- sum(runs$lengths[1:i-1])
-                                                              d <- s[x + 1, ]
-                                                              d$x <- x
-                                                              d$xend <- x + runs$lengths[i]
-                                                              d
-                                          }))
+                                          if ("colour" %in% names(s)) {
+                                            runs <- rle(s$colour)
+                                            s <- do.call("rbind", lapply(1:length(runs$lengths), function(i) {
+                                                                x <- sum(runs$lengths[1:i-1])
+                                                                d <- s[x + 1, ]
+                                                                d$x <- x
+                                                                d$xend <- x + runs$lengths[i]
+                                                                d
+                                            }))
+                                          }
                                           s
                                         }))
 
@@ -89,7 +96,9 @@ StatEtho <- ggplot2::ggproto("StatEtho", ggplot2::Stat,
                       # right at the end, as NA values are considered to be
                       # observations where no behaviour was observed (rather
                       # than missing observations).
-                      data <- data[which(! is.na(data$colour )), ]
+                      if ("colour" %in% names(data)) {
+                        data <- data[which(! is.na(data$colour )), ]
+                      }
 
                       return(data)
                     },
