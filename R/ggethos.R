@@ -46,10 +46,9 @@ StatEtho <- ggplot2::ggproto("StatEtho", ggplot2::Stat,
                             } else if ("colour" %in% names(s)) {
                               runs <- rle(s$colour)
                               s <- do.call("rbind", lapply(1:length(runs$lengths), function(i) {
-                                                       x <- sum(runs$lengths[1:i-1])
-                                                       d <- s[x + 1, ]
-                                                       d$x <- x
-                                                       d$xend <- x + runs$lengths[i]
+                                                       r <- sum(runs$lengths[0:(i-1)]) + 1
+                                                       d <- s[r, ]
+                                                       d$xend <- s[r + runs$lengths[i] - 1, "xend"]
                                                        d
                                 }))
                             }
@@ -61,20 +60,21 @@ StatEtho <- ggplot2::ggproto("StatEtho", ggplot2::Stat,
                       # in the order they appear in the data
                       } else if (! "x" %in% names(data)) {
                         data <- do.call("rbind", lapply(split(data, data$y), function(s) {
-                                          s$xend <- seq_along(s$y)
-                                          s$x <- s$xend - 1
 
                                           # For efficiency of drawing, runs of identical
                                           # behaviours are collapsed
                                           if ("colour" %in% names(s)) {
                                             runs <- rle(s$colour)
                                             s <- do.call("rbind", lapply(1:length(runs$lengths), function(i) {
-                                                                x <- sum(runs$lengths[1:i-1])
-                                                                d <- s[x + 1, ]
+                                                                x <- 1 + sum(runs$lengths[0:(i-1)])
+                                                                d <- s[x, ]
                                                                 d$x <- x
                                                                 d$xend <- x + runs$lengths[i]
                                                                 d
                                             }))
+                                          } else {
+                                            s$xend <- seq_along(s$y)
+                                            s$x <- s$xend - 1
                                           }
                                           s
                                         }))
