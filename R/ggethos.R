@@ -52,6 +52,9 @@ StatEtho <- ggplot2::ggproto("StatEtho", ggplot2::Stat,
                                         data$y)
                       }
 
+                      # Remove NA values for colour
+                      data <- data[which(! is.na(data$colour )), ]
+
                       return(data)
                     },
                     required_aes = c("y")
