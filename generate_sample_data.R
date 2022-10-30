@@ -25,9 +25,9 @@ wombats_ordered <- tibble(wombat = c("jerry", "pomelo", "speedy", "gimli")) %>%
   expand(wombat, trial) %>%
   mutate(n_observations = round(rnorm(16, mean = 50, sd = 15))) %>%
   mutate(behaviour = lapply(n_observations, generate_behaviours),
-         frame = purrr::map(n_observations, ~1:.x)) %>%
+         trial_frame = purrr::map(n_observations, ~1:.x)) %>%
   select(-n_observations) %>%
-  unnest(c(behaviour, frame))
+  unnest(c(behaviour, trial_frame))
 
 # Behaviours are recorded at regular 5-second intervals, with 'seconds'
 # representing seconds elapsed since the start of the experiment.
@@ -36,7 +36,8 @@ wombats_ordered <- tibble(wombat = c("jerry", "pomelo", "speedy", "gimli")) %>%
 sampling_period <- 5
 wombats_ordered <- wombats_ordered %>%
   group_by(wombat) %>%
-  mutate(seconds = seq(from = 0, by = sampling_period, length.out = n()))
+  mutate(frame = 1:n(),
+         seconds = seq(from = 0, by = sampling_period, length.out = n()))
 
 # As in `seconds`, except that rather then the time of an observation
 # being given as seconds elapsed since the start of the experiment, it is given
