@@ -2,12 +2,17 @@ Package: ggethos
 Title: What the Package Does (One Line, Title Case)
 Version: 0.0.0.9000
 Authors@R: 
-    person(given = "First",
+    c(person(given = "First",
            family = "Last",
            role = c("aut", "cre"),
-           email = "first.last@example.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
-License: What license it uses
+           email = "matiasandina@gmail.com"),
+      person(given = "David",
+             family = "Wilkins",
+             role = c("aut"))
+             )
+Description: Extension of ggplot2 to plot ethogram plots.
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
+Imports: 
+    ggplot2
