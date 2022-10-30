@@ -1,5 +1,5 @@
 StatEtho <- ggplot2::ggproto("StatEtho", ggplot2::Stat, 
-                    compute_panel = function(data, scales, align_trials) {
+                    compute_panel = function(data, scales, align_trials, remove_nas) {
 
                       # Skip if there is nothing to plot for this panel
                       if (nrow(data) == 0) {
@@ -92,12 +92,14 @@ StatEtho <- ggplot2::ggproto("StatEtho", ggplot2::Stat,
                                         }))
                       }
 
-                      # Remove NA values for colour. This is intentionally done
-                      # right at the end, as NA values are considered to be
-                      # observations where no behaviour was observed (rather
-                      # than missing observations).
-                      if ("colour" %in% names(data)) {
-                        data <- data[which(! is.na(data$colour )), ]
+                      # Remove NA values for colour, unless asked not to. This
+                      # is intentionally done right at the end, as NA values
+                      # are considered to be observations where no behaviour
+                      # was observed (rather than missing observations).
+                      if (remove_nas) {
+                        if ("colour" %in% names(data)) {
+                          data <- data[which(! is.na(data$colour )), ]
+                        }
                       }
 
                       return(data)
@@ -117,7 +119,8 @@ geom_ethogram <- function(mapping = NULL,
                           na.rm = FALSE,
                           show.legend = NA,
                           inherit.aes = TRUE,
-                          align_trials = FALSE) {
+                          align_trials = FALSE,
+                          remove_nas = TRUE) {
 
   layer(
     data = data,
@@ -134,6 +137,7 @@ geom_ethogram <- function(mapping = NULL,
       linejoin = linejoin,
       na.rm = na.rm,
       align_trials = align_trials,
+      remove_nas = remove_nas,
       ...
     )
   )
