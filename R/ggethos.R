@@ -1,6 +1,5 @@
-StatEtho <- ggplot2::ggproto("StatEtho", ggplot2::Stat, 
+StatEtho <- ggplot2::ggproto("StatEtho", ggplot2::Stat,
                     compute_panel = function(data, scales, align_trials, remove_nas) {
-
                       # Skip if there is nothing to plot for this panel
                       if (nrow(data) == 0) {
                         return(data)
@@ -12,7 +11,9 @@ StatEtho <- ggplot2::ggproto("StatEtho", ggplot2::Stat,
                       # If x and xend are provided, these values are passed
                       # directly to GeomSegment
                       if (all(c("x", "xend") %in% names(data))) {
-
+                        if(nrow(data) > 10^5){
+                         warning("data contains >10^5 rows, might be slow to plot")
+                        }
                       # If x is provided but not xend, behaviours are assumed
                       # to represent fixed intervals, which will be guessed
                       # from the smallest interval between provided values.
@@ -43,8 +44,8 @@ StatEtho <- ggplot2::ggproto("StatEtho", ggplot2::Stat,
                             # data.
                             if (! length(s$x) == length(unique(s$x))) {
                               warning("Some behaviours will be drawn with the same value for 'x' - is this a mistake?")
-                            } else if ("colour" %in% names(s)) {
-                              runs <- rle(s$colour)
+                            } else if ("behaviour" %in% names(s)) {
+                              runs <- rle(s$behaviour)
                               s <- do.call("rbind", lapply(1:length(runs$lengths), function(i) {
                                                        r <- sum(runs$lengths[0:(i-1)]) + 1
                                                        d <- s[r, ]
@@ -63,8 +64,8 @@ StatEtho <- ggplot2::ggproto("StatEtho", ggplot2::Stat,
 
                                           # For efficiency of drawing, runs of identical
                                           # behaviours are collapsed
-                                          if ("colour" %in% names(s)) {
-                                            runs <- rle(s$colour)
+                                          if ("behaviour" %in% names(s)) {
+                                            runs <- rle(s$behaviour)
                                             s <- do.call("rbind", lapply(1:length(runs$lengths), function(i) {
                                                                 x <- 1 + sum(runs$lengths[0:(i-1)])
                                                                 d <- s[x, ]
@@ -97,14 +98,14 @@ StatEtho <- ggplot2::ggproto("StatEtho", ggplot2::Stat,
                       # are considered to be observations where no behaviour
                       # was observed (rather than missing observations).
                       if (remove_nas) {
-                        if ("colour" %in% names(data)) {
-                          data <- data[which(! is.na(data$colour )), ]
+                        if ("behaviour" %in% names(data)) {
+                          data <- data[which(! is.na(data$behaviour )), ]
                         }
                       }
 
                       return(data)
                     },
-                    required_aes = c("y")
+                    required_aes = c("y", "behaviour")
 )
 
 geom_ethogram <- function(mapping = NULL,
@@ -122,7 +123,7 @@ geom_ethogram <- function(mapping = NULL,
                           align_trials = FALSE,
                           remove_nas = TRUE) {
 
-  layer(
+  ggplot2::layer(
     data = data,
     mapping = mapping,
     stat = stat,
