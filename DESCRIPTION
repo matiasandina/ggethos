@@ -16,3 +16,5 @@ Encoding: UTF-8
 LazyData: true
 Imports: 
     ggplot2
+URL: https://matiasandina.github.io/ggethos/
+RoxygenNote: 6.1.1

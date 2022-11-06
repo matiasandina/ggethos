@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of ggethos is to provide
+The goal of `ggethos` is to provide a user-frienldy way to plot ethograms using `ggplot2`.
 
 ## Installation
 
@@ -56,14 +56,17 @@ Let's plot the behavior of the wombats
 
 ```{r}
 # x axis will be in sample space
-ggplot(wombats, aes(y=wombat, color=behaviour)) + geom_ethogram() 
+ggplot(wombats, aes(y=wombat, behaviour=behaviour)) + geom_ethogram() 
 ```
 
 Let's look at them using a proper x axis and separating by trials:
 
 ```{r, warning=FALSE, message=F}
 # x axis will be in seconds
-ggplot(wombats, aes(x=seconds, y=wombat, color=behaviour)) + 
+ggplot(wombats, aes(x=seconds, 
+                    y=wombat, 
+                    behaviour=behaviour,
+                    color=behaviour)) + 
   geom_ethogram() +
   facet_wrap(~trial)
 ```
@@ -73,7 +76,10 @@ Can we align the trials? Yes! Use `align_trials = TRUE`:
 ```{r, warning=FALSE, message=F}
 # x axis will be in seconds
 # trials re-aligned
-ggplot(wombats, aes(x=seconds, y=wombat, color=behaviour)) + 
+ggplot(wombats, aes(x=seconds, 
+                    y=wombat, 
+                    behaviour=behaviour,
+                    color=behaviour)) + 
   geom_ethogram(align_trials = T) +
   facet_wrap(~trial)
 ```

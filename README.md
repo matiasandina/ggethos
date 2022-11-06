@@ -6,7 +6,8 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of ggethos is to provide
+The goal of `ggethos` is to provide a user-frienldy way to plot
+ethograms using `ggplot2`.
 
 ## Installation
 
@@ -43,26 +44,26 @@ library(dplyr)
 wombats %>% 
   group_by(wombat) %>% 
   slice(1:2)
-#> # A tibble: 8 × 8
+#> # A tibble: 8 × 9
 #> # Groups:   wombat [4]
-#>   wombat trial behaviour frame seconds exp_dt              start_dt           
-#>   <chr>  <int> <chr>     <int>   <dbl> <dttm>              <dttm>             
-#> 1 gimli      1 <NA>          1       0 2019-08-28 06:37:44 2019-08-28 06:37:44
-#> 2 gimli      1 <NA>          2       5 2019-08-28 06:37:44 2019-08-28 06:37:49
-#> 3 jerry      1 <NA>          1       0 2020-09-21 22:16:33 2020-09-21 22:16:33
-#> 4 jerry      1 <NA>          2       5 2020-09-21 22:16:33 2020-09-21 22:16:38
-#> 5 pomelo     1 digging       1       0 2019-09-20 23:57:04 2019-09-20 23:57:04
-#> 6 pomelo     1 digging       2       5 2019-09-20 23:57:04 2019-09-20 23:57:09
-#> 7 speedy     1 pondering     1       0 2020-01-14 08:37:44 2020-01-14 08:37:44
-#> 8 speedy     1 pondering     2       5 2020-01-14 08:37:44 2020-01-14 08:37:49
-#> # … with 1 more variable: end_dt <dttm>
+#>   wombat trial behaviour trial_frame frame seconds exp_dt             
+#>   <chr>  <int> <chr>           <int> <int>   <dbl> <dttm>             
+#> 1 gimli      1 <NA>                1     1       0 2019-08-28 06:37:44
+#> 2 gimli      1 <NA>                2     2       5 2019-08-28 06:37:44
+#> 3 jerry      1 <NA>                1     1       0 2020-09-21 22:16:33
+#> 4 jerry      1 <NA>                2     2       5 2020-09-21 22:16:33
+#> 5 pomelo     1 digging             1     1       0 2019-09-20 23:57:04
+#> 6 pomelo     1 digging             2     2       5 2019-09-20 23:57:04
+#> 7 speedy     1 pondering           1     1       0 2020-01-14 08:37:44
+#> 8 speedy     1 pondering           2     2       5 2020-01-14 08:37:44
+#> # … with 2 more variables: start_dt <dttm>, end_dt <dttm>
 ```
 
 Let’s plot the behavior of the wombats
 
 ``` r
 # x axis will be in sample space
-ggplot(wombats, aes(y=wombat, color=behaviour)) + geom_ethogram() 
+ggplot(wombats, aes(y=wombat, behaviour=behaviour)) + geom_ethogram() 
 ```
 
 <img src="man/figures/README-unnamed-chunk-2-1.png" width="100%" />
@@ -71,7 +72,10 @@ Let’s look at them using a proper x axis and separating by trials:
 
 ``` r
 # x axis will be in seconds
-ggplot(wombats, aes(x=seconds, y=wombat, color=behaviour)) + 
+ggplot(wombats, aes(x=seconds, 
+                    y=wombat, 
+                    behaviour=behaviour,
+                    color=behaviour)) + 
   geom_ethogram() +
   facet_wrap(~trial)
 ```
@@ -83,7 +87,10 @@ Can we align the trials? Yes! Use `align_trials = TRUE`:
 ``` r
 # x axis will be in seconds
 # trials re-aligned
-ggplot(wombats, aes(x=seconds, y=wombat, color=behaviour)) + 
+ggplot(wombats, aes(x=seconds, 
+                    y=wombat, 
+                    behaviour=behaviour,
+                    color=behaviour)) + 
   geom_ethogram(align_trials = T) +
   facet_wrap(~trial)
 ```
