@@ -123,6 +123,15 @@ StatEtho <- ggplot2::ggproto("StatEtho", ggplot2::Stat,
                     required_aes = c("y")
 )
 
+#' Ethogram Geom Wrapper
+#' @param mapping Set of aesthetics created by `aes()` or
+#'   `aes_()`. If specified and `inherit.aes = TRUE` (the
+#'   default), it is combined with the default mapping at the top level of the
+#'   plot. You must supply `mapping` if there is no plot mapping.
+#' @param data Data provided for the plot if not provided through previous `ggplot(data, ...)` layer
+#' @param align_trials boolean indicating whether to align all trials to zero (default = FALSE)
+#' @param remove_nas boolean indicating whether to remove the `NAs` in the data or not (default = TRUE)
+#' @seealso [ggplot2::geom_segment()]
 #' @export
 geom_ethogram <- function(mapping = NULL,
                           data = NULL,

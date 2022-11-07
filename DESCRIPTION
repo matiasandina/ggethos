@@ -2,8 +2,8 @@ Package: ggethos
 Title: What the Package Does (One Line, Title Case)
 Version: 0.0.0.9000
 Authors@R: 
-    c(person(given = "First",
-           family = "Last",
+    c(person(given = "Matias",
+           family = "Andina",
            role = c("aut", "cre"),
            email = "matiasandina@gmail.com"),
       person(given = "David",
