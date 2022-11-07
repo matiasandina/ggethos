@@ -98,7 +98,7 @@
 <p>Let’s plot the behavior of the wombats</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># x axis will be in sample space</span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">wombats</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>y<span class="op">=</span><span class="va">wombat</span>, behaviour<span class="op">=</span><span class="va">behaviour</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu">geom_ethogram</span><span class="op">(</span><span class="op">)</span> </span></code></pre></div>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">wombats</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>y<span class="op">=</span><span class="va">wombat</span>, behaviour<span class="op">=</span><span class="va">behaviour</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="reference/geom_ethogram.html">geom_ethogram</a></span><span class="op">(</span><span class="op">)</span> </span></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-2-1.png" width="100%"></p>
 <p>Let’s look at them using a proper x axis and separating by trials:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
@@ -107,7 +107,7 @@
 <span>                    y<span class="op">=</span><span class="va">wombat</span>, </span>
 <span>                    behaviour<span class="op">=</span><span class="va">behaviour</span>,</span>
 <span>                    color<span class="op">=</span><span class="va">behaviour</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>  <span class="fu">geom_ethogram</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="reference/geom_ethogram.html">geom_ethogram</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">trial</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-3-1.png" width="100%"></p>
 <p>Can we align the trials? Yes! Use <code>align_trials = TRUE</code>:</p>
@@ -118,7 +118,7 @@
 <span>                    y<span class="op">=</span><span class="va">wombat</span>, </span>
 <span>                    behaviour<span class="op">=</span><span class="va">behaviour</span>,</span>
 <span>                    color<span class="op">=</span><span class="va">behaviour</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>  <span class="fu">geom_ethogram</span><span class="op">(</span>align_trials <span class="op">=</span> <span class="cn">T</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="reference/geom_ethogram.html">geom_ethogram</a></span><span class="op">(</span>align_trials <span class="op">=</span> <span class="cn">T</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">trial</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-4-1.png" width="100%"></p>
 </div>
@@ -147,7 +147,7 @@
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>First Last <br><small class="roles"> Author, maintainer </small>  </li>
+<li>Matias Andina <br><small class="roles"> Author, maintainer </small>  </li>
 <li>David Wilkins <br><small class="roles"> Author </small>  </li>
 </ul>
 </div>
@@ -160,7 +160,7 @@
 
     <footer><div class="pkgdown-footer-left">
   <p></p>
-<p>Developed by First Last, David Wilkins.</p>
+<p>Developed by Matias Andina, David Wilkins.</p>
 </div>
 
 <div class="pkgdown-footer-right">
