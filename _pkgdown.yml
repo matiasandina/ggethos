@@ -1,4 +1,5 @@
 url: https://matiasandina.github.io/ggethos/
 template:
   bootstrap: 5
-
+development:
+  mode: auto
