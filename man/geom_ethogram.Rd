@@ -18,6 +18,26 @@ plot. You must supply `mapping` if there is no plot mapping.}
 
 \item{data}{Data provided for the plot if not provided through previous `ggplot(data, ...)` layer}
 
+\item{stat}{The statistical transformation to use on the data for this layer, as a string. The default ("etho") will use `StatEtho` from `ggethos` to plot ethograms by computing the bounds to call [ggplot2::geom_segment()]. Changing this will not generate ethograms.}
+
+\item{position}{Position adjustment, either as a string, or the result of a call to a position adjustment function.}
+
+\item{...}{Other arguments passed on to [ggplot2::layer()]. These are often aesthetics, used to set an aesthetic to a fixed value, like colour = "red" or size = 3. They may also be parameters to the paired geom/stat.}
+
+\item{size}{Line size. Default=5, increase for thicker ethogram plots.}
+
+\item{arrow}{specification for arrow heads, as created by arrow().}
+
+\item{lineend}{Line end style (round, butt, square).}
+
+\item{linejoin}{Line join style (round, mitre, bevel).}
+
+\item{na.rm}{If `FALSE`, the default, missing values are removed with a warning. If `TRUE`, missing values are silently removed.}
+
+\item{show.legend}{logical. Should this layer be included in the legends? `NA`, the default, includes if any aesthetics are mapped. `FALSE` never includes, and `TRUE` always includes. It can also be a named logical vector to finely select the aesthetics to display.}
+
+\item{inherit.aes}{If `FALSE`, overrides the default aesthetics, rather than combining with them. This is most useful for helper functions that define both data and aesthetics and shouldn't inherit behaviour from the default plot specification, e.g. [ggplot2::borders()]}
+
 \item{align_trials}{boolean indicating whether to align all trials to zero (default = FALSE)}
 
 \item{remove_nas}{boolean indicating whether to remove the `NAs` in the data or not (default = TRUE)}

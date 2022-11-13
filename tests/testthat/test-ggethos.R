@@ -70,7 +70,7 @@ testthat::test_that("drawing frames of uniform duration", {
   vdiffr::expect_doppelganger("frames of uniform duration in datetime, with alignment", p)
 })
 
-test_that("explicit start and end", {
+testthat::test_that("explicit start and end", {
 
   p <- ggplot(wombats_duration,
               aes(x = start_seconds,
@@ -93,7 +93,7 @@ test_that("explicit start and end", {
   vdiffr::expect_doppelganger("explicit start and end, in datetimes", p)
 })
 
-test_that("behaviour mapped to y", {
+testthat::test_that("behaviour mapped to y", {
 
   p <- ggplot(wombats,
               aes(y = behaviour,

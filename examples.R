@@ -1,24 +1,5 @@
 library(ggplot2)
 library(ggethos)
-# Frames in implied order
-ggplot(wombats, aes(y = wombat, behaviour = behaviour)) +
-  geom_ethogram() +
-  facet_wrap(~ trial)
-
-# Frames of uniform duration 1
-ggplot(wombats, aes(x = frame, y = wombat, behaviour = behaviour)) +
-  geom_ethogram() +
-  facet_wrap(~ trial)
-
-# Observations at uniform intervals
-ggplot(wombats, aes(x = seconds, y = wombat, behaviour = behaviour)) +
-  geom_ethogram(align_trials = TRUE) +
-  facet_wrap(~ trial)
-
-# Observations at specified datetimes with uniform 5-second intervals
-ggplot(wombats_duration, aes(x = start_dt, y = wombat, behaviour = behaviour)) +
-  geom_ethogram() +
-  facet_wrap(~ trial, scales = "free")
 
 # Observations with specified start and end times, expressed in seconds
 ggplot(wombats_duration, aes(x = start_seconds, xend = end_seconds, y = wombat, colour = behaviour)) +

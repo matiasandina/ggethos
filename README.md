@@ -4,6 +4,11 @@
 # ggethos <a href="https://matiasandina.github.io/ggethos/"><img src="man/figures/logo.png" align="right" height="138" /></a>
 
 <!-- badges: start -->
+
+[![CRAN
+status](https://www.r-pkg.org/badges/version/ggethos)](https://CRAN.R-project.org/package=ggethos)
+[![Lifecycle:
+experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
 
 The goal of `ggethos` is to provide a user-frienldy way to plot

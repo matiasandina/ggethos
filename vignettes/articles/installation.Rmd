@@ -1,0 +1,17 @@
+---
+title: "installation"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+At this point, this is an experimental package, and you can only install the development version from [GitHub](https://github.com/) with:
+
+``` {r, eval=F}
+# install.packages("devtools")
+devtools::install_github("matiasandina/ggethos")
+```

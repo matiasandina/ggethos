@@ -1,3 +1,5 @@
+#' @keywords internal
+#' @description `r lifecycle::badge("experimental")`
 compute_ethogram <- function(data, scales, align_trials, remove_nas){
   #print("First line of compute_panel()")
   #print(data)
@@ -113,7 +115,7 @@ compute_ethogram <- function(data, scales, align_trials, remove_nas){
 
 }
 
-
+#' @keywords internal
 StatEtho <- ggplot2::ggproto("StatEtho", ggplot2::Stat,
                     compute_panel = function(data, scales, align_trials, remove_nas) {
                       #print(head(data))
@@ -123,7 +125,8 @@ StatEtho <- ggplot2::ggproto("StatEtho", ggplot2::Stat,
                     required_aes = c("y")
 )
 
-#' Ethogram Geom Wrapper
+#' @title Geom Segment Wrapper for Ethograms
+#' @description `r lifecycle::badge("experimental")` geom_ethogram() calculates the necessary `x` and `xend` (unless provided) to draw ethograms utilizing [ggplot2::geom_segment()]. Calculations are provided by `ggethos:::StatEtho()`, which is kept internal to avoid users having to call `geom_segment()` after `stat_etho()`.
 #' @param mapping Set of aesthetics created by `aes()` or
 #'   `aes_()`. If specified and `inherit.aes = TRUE` (the
 #'   default), it is combined with the default mapping at the top level of the
@@ -131,6 +134,16 @@ StatEtho <- ggplot2::ggproto("StatEtho", ggplot2::Stat,
 #' @param data Data provided for the plot if not provided through previous `ggplot(data, ...)` layer
 #' @param align_trials boolean indicating whether to align all trials to zero (default = FALSE)
 #' @param remove_nas boolean indicating whether to remove the `NAs` in the data or not (default = TRUE)
+#' @param stat The statistical transformation to use on the data for this layer, as a string. The default ("etho") will use `StatEtho` from `ggethos` to plot ethograms by computing the bounds to call [ggplot2::geom_segment()]. Changing this will not generate ethograms.
+#' @param position Position adjustment, either as a string, or the result of a call to a position adjustment function.
+#' @param size Line size. Default=5, increase for thicker ethogram plots.
+#' @param arrow specification for arrow heads, as created by arrow().
+#' @param lineend Line end style (round, butt, square).
+#' @param linejoin Line join style (round, mitre, bevel).
+#' @param na.rm If `FALSE`, the default, missing values are removed with a warning. If `TRUE`, missing values are silently removed.
+#' @param show.legend logical. Should this layer be included in the legends? `NA`, the default, includes if any aesthetics are mapped. `FALSE` never includes, and `TRUE` always includes. It can also be a named logical vector to finely select the aesthetics to display.
+#' @param inherit.aes If `FALSE`, overrides the default aesthetics, rather than combining with them. This is most useful for helper functions that define both data and aesthetics and shouldn't inherit behaviour from the default plot specification, e.g. [ggplot2::borders()]
+#' @param ... Other arguments passed on to [ggplot2::layer()]. These are often aesthetics, used to set an aesthetic to a fixed value, like colour = "red" or size = 3. They may also be parameters to the paired geom/stat.
 #' @seealso [ggplot2::geom_segment()]
 #' @export
 geom_ethogram <- function(mapping = NULL,
