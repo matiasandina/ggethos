@@ -1,3 +1,20 @@
+#' @title Guess Axis Interval
+#' @description `r lifecycle::badge("experimental")` This function guesses the interval using differences in the x axis provided to geom_ethogram().
+#' @keywords internal
+guess_interval <- function(diffs){
+  if (length(diffs) > 0) {
+    interval <- min(diffs)
+    message("No observation interval provided, using guessed interval ",
+            interval
+    )
+  } else {
+    warning("No observation interval provided and unable to guess, some behaviours will not be drawn")
+    interval <- 0
+  }
+  return(interval)
+}
+
+
 #' @keywords internal
 #' @description `r lifecycle::badge("experimental")`
 compute_ethogram <- function(data, scales, align_trials, remove_nas){
@@ -33,15 +50,7 @@ compute_ethogram <- function(data, scales, align_trials, remove_nas){
       s <- s[order(s$x), ]
       diffs <- diff(s$x)
       diffs <- diffs[! diffs == 0]
-      if (length(diffs) > 0) {
-        interval <- min(diffs)
-        message("No observation interval provided, using guessed interval ",
-                interval
-        )
-      } else {
-        warning("No observation interval provided and unable to guess, some behaviours will not be drawn")
-        interval <- 0
-      }
+      interval <- guess_interval(diffs)
       s$xend <- s$x + interval
 
       # For efficiency of drawing, runs of identical
