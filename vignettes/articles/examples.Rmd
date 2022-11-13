@@ -1,5 +1,5 @@
 ---
-title: "examples"
+title: "Basic Examples"
 ---
 
 ```{r, include = FALSE}
@@ -9,27 +9,100 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
+```{r setup, message=F, warning=F}
+library(dplyr)
 library(ggplot2)
 library(ggethos)
+```
+
+## Ethogram Basics and heuristics
+
+To plot an ethogram, we need to know:
+
+1. `x` and `xend`
+1. `y` axis
+1. What observations must be grouped together
+1. How to color the segments (Optional)
+
+However, at its bare minimum, users could potentially get away with just:
+
+1. `y` axis
+1. What observations must be grouped together
+
+The philosophy behind `geom_ethogram()` is to facilitate the user experience. In most use cases, observations will be ordered according to the way they were temporally collected. Thus, it is reasonable for `geom_ethogram()` to assume `y` observations are ordered in time and to use the implied order to calculate `x` and `xend` using certain heuristics.
+
+Because we want to be transparent about guessing the temporal structure, we provide verbose output when `x` and/or `xend` are missing.
+
+Ethograms can easily contain data aggregated from thousands of observations (e.g., videos at 30fps). But guessing the interval forces us to plot . To prevent unnecessary plotting, `geom_ethogram()` aggregates continuous behaviors (i.e., instead of plotting 3 blocks of length 1, we plot 1 block of length 3). This function is implemented by the `behaviour` aesthetic, which allows us to free typical `ggplot2` aesthethics such as `group` and `coluor` for other uses. 
+
+Finally, `geom_ethogram()` will remove `NA`s in your data by default. You can change this by setting `remove_na=FALSE` (see [NA handling](#na-handling)).
+
+## Basic Examples x Axis
+
+This article contains information about how `geom_ethogram()` handles the `x` axis computation with different `aes()` calls and data types. For other examples, see [Using Color](articles/color.html).
+
+### Using implied order
+
+Frames are provided in implied order and `geom_ethogram()` will guess interval of 1. The `x` axis will be in "sample space" (i.e., 1:n_samples).
+
+```{r implied-order}
 # Frames in implied order
-ggplot(wombats, aes(y = wombat, behaviour = behaviour)) +
-  geom_ethogram() +
-  facet_wrap(~ trial)
+ggplot(wombats, aes(y = wombat, 
+                    behaviour = behaviour)) +
+  geom_ethogram() 
+```
 
+The case above is the same as providing a `frame = 1:n()` column (named after a putative video frame ID). The `wombats` dataset already contains such a column.
+
+```{r uniform-duration-1}
 # Frames of uniform duration 1
-ggplot(wombats, aes(x = frame, y = wombat, behaviour = behaviour)) +
-  geom_ethogram() +
-  facet_wrap(~ trial)
+ggplot(wombats, aes(x = frame, 
+                    y = wombat, behaviour = behaviour)) +
+  geom_ethogram() 
+```
 
+If the sampling period is known (e.g., 5 seconds), it's easy to go from `frame` (e.g., 1, 2, 3) to `seconds` (e.g., 5, 10, 15 seconds).
+
+```{r uniform-interval}
 # Observations at uniform intervals
-ggplot(wombats, aes(x = seconds, y = wombat, behaviour = behaviour)) +
-  geom_ethogram(align_trials = TRUE) +
-  facet_wrap(~ trial)
+ggplot(wombats, 
+       aes(x = seconds, 
+           y = wombat, 
+           behaviour = behaviour)) +
+  geom_ethogram()
+```
 
+### Handling Datetimes
+
+```{r uniform-5-sec-dt}
 # Observations at specified datetimes with uniform 5-second intervals
 ggplot(wombats_duration, aes(x = start_dt, y = wombat, behaviour = behaviour)) +
   geom_ethogram() +
   facet_wrap(~ trial, scales = "free")
 
 ```
+
+### A word of caution {#na-handling}
+
+This will produce a plot that looks strange compared with the other ones. It's just that the NAs are also shown. If your data is complete, the plots in these examples will look similar to the plot show below and you might want to look into using color.
+
+```{r implied-order-with-nas}
+# Frames in implied order
+ggplot(wombats, aes(y = wombat, 
+                    behaviour = behaviour)) +
+  geom_ethogram(remove_nas = FALSE) 
+```
+
+
+
+## Summary
+
+This article covered the basics of how `geom_ethogram()` handles the `x` axis and the overall philosophy behind this function.
+
+## Session Info
+
+```{r session-info}
+sessioninfo::session_info()
+
+```
+

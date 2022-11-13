@@ -1,0 +1,69 @@
+---
+title: "Using Color"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup, warning=F, message=F}
+library(dplyr)
+library(ggethos)
+library(ggplot2)
+```
+
+In this article we will revisit the basic usage adding color.
+
+## Outside `aes()`
+
+You are free to decide how to color the segments in the ethograms when using `geom_ethogram()`.
+
+```{r color-salmon}
+ggplot(wombats, aes(y = wombat, 
+                     behaviour = behaviour)) +
+     geom_ethogram(remove_nas = FALSE, color="salmon")
+```
+
+
+## Inside `aes()`
+
+We can also choose to use color based on any column present in our data. For example, we can color by `wombat`:
+
+```{r color-wombat}
+ggplot(wombats, aes(y = wombat, 
+                     behaviour = behaviour)) +
+     geom_ethogram(aes(color=wombat), 
+                   remove_nas = FALSE)
+```
+
+Perhaps the most common use would be to color using the `behaviour`:
+
+```{r color-behaviour}
+ggplot(wombats, aes(y = wombat, 
+                     behaviour = behaviour)) +
+     geom_ethogram(aes(color=behaviour), 
+                   remove_nas = FALSE)
+```
+
+Note that we have been using `remove_nas=FALSE`, while we would produce a different output when using the default:
+
+```{r color-behaviour-no-nas}
+ggplot(wombats, aes(y = wombat, 
+                     behaviour = behaviour)) +
+     geom_ethogram(aes(color=behaviour))
+```
+
+## Summary
+
+In this article we will revisit the basic usage adding color. To explore further uses see [Using Trials](articles/trials.html)
+
+## Session Info
+
+```{r session-info}
+
+
+```
+

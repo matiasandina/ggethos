@@ -5,3 +5,16 @@ development:
   mode: auto
 navbar:
   type: inverse
+  left:
+    - icon: fa-home
+      href: index.html
+    - text: "How To"
+      menu: 
+      -  text: Installation
+         href: articles/installation.html
+      - text: "Basic Use"
+        href: articles/examples.html
+      - text: "Using Color"
+        href: articles/color.html  
+      - text: "Using Trials"
+        href: articles/trials.html

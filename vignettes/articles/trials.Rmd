@@ -1,0 +1,91 @@
+---
+title: "Using Trials"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup, warning=F, message=F}
+library(dplyr)
+library(ggethos)
+library(ggplot2)
+```
+
+In many situations, behaviour is collected in trials. For this reason, we have provided `trials` in `wombats` and the `align_trials` parameter in `geom_ethogram()`.
+
+## Understanding Trials
+
+Let's explore the nature of the dataset. This is how it looks like when not visualizing trials.
+
+```{r seconds-no-trials}
+ggplot(wombats, 
+       aes(x=seconds, 
+           y = wombat, 
+           behaviour = behaviour,
+           color=behaviour)) +
+  geom_ethogram() 
+```
+
+Here's when we facet by trial:
+
+```{r seconds-facet-trials}
+ggplot(wombats, 
+       aes(x=seconds, 
+           y = wombat, 
+           behaviour = behaviour,
+           color = behaviour)) +
+  geom_ethogram() +
+  facet_wrap(~trial)
+```
+
+We can now see the issue: the trials were collected with a continuous clock and we would like to align them to common time (i.e., have all trials start at zero). This is when `align_trials` comes handy:
+
+```{r seconds-facet-trials-aligned}
+ggplot(wombats, 
+       aes(x=seconds, 
+           y = wombat, 
+           behaviour = behaviour,
+           color = behaviour)) +
+  geom_ethogram(align_trials=TRUE) +
+  facet_wrap(~trial)
+```
+
+Here's an another example. Let's say we wanted to facet by `wombat` and have `trial` be on the `y` axis instead.
+
+```{r trial-y}
+ggplot(wombats, 
+       aes(x=seconds, 
+           y = trial, 
+           behaviour = behaviour,
+           color = behaviour)) +
+    geom_ethogram() +
+    facet_wrap(~wombat)
+
+```
+We can easily align trials again using `align_trials=T`:
+
+```{r trial-y-aligned}
+ggplot(wombats, 
+       aes(x=seconds, 
+           y = trial, 
+           behaviour = behaviour,
+           color = behaviour)) +
+    geom_ethogram(align_trials = T) +
+    facet_wrap(~wombat)
+
+```
+
+## Summary 
+
+In this article, we have covered basic functionality of aligning trials by using the `align_trials` argument.
+
+## Session Info
+
+```{r}
+sessioninfo::session_info()
+```
+
