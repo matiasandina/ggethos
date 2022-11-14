@@ -10,7 +10,6 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup, message=F, warning=F}
-library(dplyr)
 library(ggplot2)
 library(ggethos)
 ```
@@ -82,7 +81,7 @@ ggplot(wombats_duration, aes(x = start_dt, y = wombat, behaviour = behaviour)) +
 
 ```
 
-### A word of caution {#na-handling}
+### NA handling {#na-handling}
 
 This will produce a plot that looks strange compared with the other ones. It's just that the NAs are also shown. If your data is complete, the plots in these examples will look similar to the plot show below and you might want to look into using color.
 
@@ -93,6 +92,18 @@ ggplot(wombats, aes(y = wombat,
   geom_ethogram(remove_nas = FALSE) 
 ```
 
+### Ethogram becomes barplot
+
+While using this package, it's possible to avoid providing enough information for us to compute a proper ethogram. For example, we can accidentaly transform an ethogram into a bar plot.
+
+```{r}
+ggplot(wombats, 
+        aes(y = behaviour, 
+            behaviour = behaviour, 
+            group=behaviour)) +
+     geom_ethogram(remove_nas = F) + 
+  facet_wrap(~wombat)
+```
 
 
 ## Summary

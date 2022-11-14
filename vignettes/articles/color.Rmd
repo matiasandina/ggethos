@@ -10,7 +10,6 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup, warning=F, message=F}
-library(dplyr)
 library(ggethos)
 library(ggplot2)
 ```
@@ -63,7 +62,7 @@ In this article we will revisit the basic usage adding color. To explore further
 ## Session Info
 
 ```{r session-info}
-
+sessioninfo::session_info()
 
 ```
 

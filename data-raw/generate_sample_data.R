@@ -51,7 +51,7 @@ wombats_ordered <- wombats_ordered %>%
     start_dt = exp_dt + dseconds(seconds),
     end_dt = lead(start_dt, 1, default=last(start_dt) + sampling_period))
 
-wombats <- wombats_ordered
+wombats <- wombats_ordered %>% ungroup()
 usethis::use_data(wombats, overwrite = TRUE)
 
 wombats_summ <-
