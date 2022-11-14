@@ -6,7 +6,7 @@
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
-    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
+    <nav class="navbar fixed-top navbar-inverse navbar-expand-lg bg-light"><div class="container">
     
     <a class="navbar-brand me-2" href="../index.html">ggethos</a>
 
@@ -18,8 +18,20 @@
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="active nav-item">
-  <a class="nav-link" href="../reference/index.html">Reference</a>
+      <ul class="navbar-nav me-auto"><li class="nav-item">
+  <a class="nav-link" href="../index.html">
+    <span class="fa fa-home"></span>
+     
+  </a>
+</li>
+<li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-how-to">How To</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-how-to">
+    <a class="dropdown-item" href="../articles/installation.html">Installation</a>
+    <a class="dropdown-item" href="../articles/examples.html">Basic Use</a>
+    <a class="dropdown-item" href="../articles/color.html">Using Color</a>
+    <a class="dropdown-item" href="../articles/trials.html">Using Trials</a>
+  </div>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
@@ -60,6 +72,46 @@ plot. You must supply `mapping` if there is no plot mapping.</p></dd>
 
 <dt>data</dt>
 <dd><p>Data provided for the plot if not provided through previous `ggplot(data, ...)` layer</p></dd>
+
+
+<dt>stat</dt>
+<dd><p>The statistical transformation to use on the data for this layer, as a string. The default ("etho") will use `StatEtho` from `ggethos` to plot ethograms by computing the bounds to call [ggplot2::geom_segment()]. Changing this will not generate ethograms.</p></dd>
+
+
+<dt>position</dt>
+<dd><p>Position adjustment, either as a string, or the result of a call to a position adjustment function.</p></dd>
+
+
+<dt>...</dt>
+<dd><p>Other arguments passed on to [ggplot2::layer()]. These are often aesthetics, used to set an aesthetic to a fixed value, like colour = "red" or size = 3. They may also be parameters to the paired geom/stat.</p></dd>
+
+
+<dt>size</dt>
+<dd><p>Line size. Default=5, increase for thicker ethogram plots.</p></dd>
+
+
+<dt>arrow</dt>
+<dd><p>specification for arrow heads, as created by arrow().</p></dd>
+
+
+<dt>lineend</dt>
+<dd><p>Line end style (round, butt, square).</p></dd>
+
+
+<dt>linejoin</dt>
+<dd><p>Line join style (round, mitre, bevel).</p></dd>
+
+
+<dt>na.rm</dt>
+<dd><p>If `FALSE`, the default, missing values are removed with a warning. If `TRUE`, missing values are silently removed.</p></dd>
+
+
+<dt>show.legend</dt>
+<dd><p>logical. Should this layer be included in the legends? `NA`, the default, includes if any aesthetics are mapped. `FALSE` never includes, and `TRUE` always includes. It can also be a named logical vector to finely select the aesthetics to display.</p></dd>
+
+
+<dt>inherit.aes</dt>
+<dd><p>If `FALSE`, overrides the default aesthetics, rather than combining with them. This is most useful for helper functions that define both data and aesthetics and shouldn't inherit behaviour from the default plot specification, e.g. [ggplot2::borders()]</p></dd>
 
 
 <dt>align_trials</dt>
