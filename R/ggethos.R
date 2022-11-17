@@ -19,7 +19,7 @@ guess_interval <- function(diffs){
 #' @description `r lifecycle::badge("experimental")`
 compute_ethogram <- function(data, scales, align_trials, remove_nas){
   #print("First line of compute_panel()")
-  #print(data)
+  #print(head(data))
   # Skip if there is nothing to plot for this panel
   #if (nrow(data) == 0) {
   #  return(data)
@@ -27,6 +27,16 @@ compute_ethogram <- function(data, scales, align_trials, remove_nas){
 
   # yend is always y
   data$yend <- data$y
+  # When behavior or trial are in y, we have issues with aggregating
+  # We should improve the strategy of handling these cases
+  # Behaviour should be required aes but not working
+  #if ("behaviour" %in% names(data)){
+    # TODO: problem, as.numeric(as.factor()) keeps the NAs in place
+    # we want to compare them so it's an issue
+    # maybe there's a way to know if behaviour was selected as y?
+  #  behaviuor_is_y <- all(as.numeric(as.factor(data$behaviour)) == data$y)
+  #  print(behaviuor_is_y)
+  #}
 
   # If x and xend are provided, these values are passed
   # directly to GeomSegment
