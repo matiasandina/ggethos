@@ -5,7 +5,9 @@
 \alias{wombats}
 \alias{wombats_duration}
 \title{Wombats datasets}
-\format{Each is a tibble}
+\format{
+Each is a tibble
+}
 \usage{
 wombats
 

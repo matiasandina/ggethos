@@ -2,13 +2,24 @@
 % Please edit documentation in R/ggethos.R
 \name{geom_ethogram}
 \alias{geom_ethogram}
-\title{Ethogram Geom Wrapper}
+\title{Geom Segment Wrapper for Ethograms}
 \usage{
-geom_ethogram(mapping = NULL, data = NULL, stat = "etho",
-  position = "identity", ..., size = 5, arrow = NULL,
-  lineend = "butt", linejoin = "round", na.rm = FALSE,
-  show.legend = NA, inherit.aes = TRUE, align_trials = FALSE,
-  remove_nas = TRUE)
+geom_ethogram(
+  mapping = NULL,
+  data = NULL,
+  stat = "etho",
+  position = "identity",
+  ...,
+  size = 5,
+  arrow = NULL,
+  lineend = "butt",
+  linejoin = "round",
+  na.rm = FALSE,
+  show.legend = NA,
+  inherit.aes = TRUE,
+  align_trials = FALSE,
+  remove_nas = TRUE
+)
 }
 \arguments{
 \item{mapping}{Set of aesthetics created by `aes()` or
@@ -43,7 +54,7 @@ plot. You must supply `mapping` if there is no plot mapping.}
 \item{remove_nas}{boolean indicating whether to remove the `NAs` in the data or not (default = TRUE)}
 }
 \description{
-Ethogram Geom Wrapper
+`r lifecycle::badge("experimental")` geom_ethogram() calculates the necessary `x` and `xend` (unless provided) to draw ethograms utilizing [ggplot2::geom_segment()]. Calculations are provided by `ggethos:::StatEtho()`, which is kept internal to avoid users having to call `geom_segment()` after `stat_etho()`.
 }
 \seealso{
 [ggplot2::geom_segment()]

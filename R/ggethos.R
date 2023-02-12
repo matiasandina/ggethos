@@ -15,6 +15,7 @@ guess_interval <- function(diffs){
 }
 
 
+#' @title Compute ethogram
 #' @keywords internal
 #' @description `r lifecycle::badge("experimental")`
 compute_ethogram <- function(data, scales, align_trials, remove_nas){
