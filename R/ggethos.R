@@ -14,10 +14,10 @@ guess_interval <- function(diffs){
   return(interval)
 }
 
-
 #' @title Compute ethogram
 #' @keywords internal
 #' @description `r lifecycle::badge("experimental")`
+#' @importFrom vctrs vec_identify_runs 
 compute_ethogram <- function(data, scales, align_trials, remove_nas){
   #print("First line of compute_panel()")
   #print(head(data))
@@ -72,36 +72,36 @@ compute_ethogram <- function(data, scales, align_trials, remove_nas){
         warning("Some behaviours will be drawn with the same value for 'x' - is this a mistake?")
       } else if ("behaviour" %in% names(s)) {
         #print("aggregating behavior")
-        runs <- rle(s$behaviour)
-        s <- do.call("rbind", lapply(1:length(runs$lengths), function(i) {
-          r <- sum(runs$lengths[0:(i-1)]) + 1
-          d <- s[r, ]
-          d$xend <- s[r + runs$lengths[i] - 1, "xend"]
-          d
+        s$RUN <- vctrs::vec_identify_runs(s$behaviour)
+        s <- do.call("rbind", lapply(split(s, s$RUN), function(run) {
+          run$x <- min(run$x)
+          run$xend <- max(run$xend)
+          run[1, ]
         }))
+        s$RUN <- NULL
       }
       s
     }
     ))
 
-    # If no x is provided, behaviours are set to unit width
-    # in the order they appear in the data
   }
 
+  # If no x is provided, behaviours are set to unit width
+  # in the order they appear in the data
   if (! "x" %in% names(data)) {
     data <- do.call("rbind", lapply(split(data, data$y), function(s) {
 
       # For efficiency of drawing, runs of identical
-      # behaviours are collapsed
+      # behaviours are collapsed 
       if ("behaviour" %in% names(s)) {
-        runs <- rle(s$behaviour)
-        s <- do.call("rbind", lapply(1:length(runs$lengths), function(i) {
-          x <- 1 + sum(runs$lengths[0:(i-1)])
-          d <- s[x, ]
-          d$x <- x
-          d$xend <- x + runs$lengths[i]
-          d
+        s$RUN <- vctrs::vec_identify_runs(s$behaviour)
+        s$x <- seq_along(s$RUN)
+        s <- do.call("rbind", lapply(split(s, s$RUN), function(run) {
+          run$xend <- max(run$x) + 1
+          run$x <- min(run$x)
+          run[1, ]
         }))
+        s$RUN <- NULL
       } else {
         s$xend <- seq_along(s$y)
         s$x <- s$xend - 1

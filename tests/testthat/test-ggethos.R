@@ -19,6 +19,7 @@ testthat::test_that("drawing frames in implied order behavior color", {
                   colour = behaviour)) +
     geom_ethogram() +
     facet_wrap(~ trial)
+
   vdiffr::expect_doppelganger("frames in implied order behavior color", p)
 })
 
