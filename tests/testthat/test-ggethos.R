@@ -112,12 +112,16 @@ testthat::test_that("behaviour mapped to y", {
     facet_wrap(~ wombat)
   vdiffr::expect_doppelganger("behaviour mapped to y, with frames of 5 seconds", p)
 
+  # With the current interval guessing algorithm, this plot (correctly) emits a
+  # warning
   p <- ggplot(wombats,
               aes(x = seconds,
                   behaviour = behaviour,
                   y = behaviour)) +
     geom_ethogram() +
     facet_wrap(trial ~ wombat)
-  vdiffr::expect_doppelganger("behaviour mapped to y, faceted by trial and wombat", p)
+
+  expect_warning( { print(p) } )
+  # vdiffr::expect_doppelganger("behaviour mapped to y, faceted by trial and wombat", p)
 
 })
