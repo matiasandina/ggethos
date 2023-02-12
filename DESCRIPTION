@@ -17,10 +17,11 @@ LazyData: true
 Imports: 
     ggplot2
 URL: https://matiasandina.github.io/ggethos/
-RoxygenNote: 6.1.1
+RoxygenNote: 7.1.2
 Depends: 
     R (>= 2.10)
 Suggests: 
     rmarkdown,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    vdiffr (>= 1.0.5)
 Config/testthat/edition: 3
