@@ -15,10 +15,12 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Imports: 
+    dplyr,
     ggplot2,
+    magrittr,
     vctrs (>= 0.5.2)
 URL: https://matiasandina.github.io/ggethos/
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.3
 Depends: 
     R (>= 2.10)
 Suggests: 
