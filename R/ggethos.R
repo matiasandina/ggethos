@@ -17,123 +17,95 @@ guess_interval <- function(diffs){
 #' @title Compute ethogram
 #' @keywords internal
 #' @description `r lifecycle::badge("experimental")`
-#' @importFrom vctrs vec_identify_runs 
-compute_ethogram <- function(data, scales, align_trials, remove_nas){
-  #print("First line of compute_panel()")
-  #print(head(data))
-  # Skip if there is nothing to plot for this panel
-  #if (nrow(data) == 0) {
-  #  return(data)
-  #}
+#' @importFrom vctrs vec_identify_runs
+#'
+compute_ethogram <- function (data, scales, align_trials, remove_nas)
+{
 
+  # setup data --------------------------------------------------------------
+  # this can evolve into a setup_data f(x) to handle cases
   # yend is always y
   data$yend <- data$y
-  # When behavior or trial are in y, we have issues with aggregating
-  # We should improve the strategy of handling these cases
-  # Behaviour should be required aes but not working
-  #if ("behaviour" %in% names(data)){
-    # TODO: problem, as.numeric(as.factor()) keeps the NAs in place
-    # we want to compare them so it's an issue
-    # maybe there's a way to know if behaviour was selected as y?
-  #  behaviuor_is_y <- all(as.numeric(as.factor(data$behaviour)) == data$y)
-  #  print(behaviuor_is_y)
-  #}
-
+  # handle the cases this can evolve to
+  # we could have a switch type of call later
+  has_x_has_xend <- all(c("x", "xend") %in% names(data))
+  has_x_no_xend <- ("x" %in% names(data)) & !("xend" %in% names(data))
+  no_x <- !("x" %in% names(data))
+  has_color <- "colour" %in% names(data)
+  if (isFALSE(has_color)){
+    data$colour <- "black"
+  }
+  # calculate ---------------------------------------------------------------
   # If x and xend are provided, these values are passed
   # directly to GeomSegment
-  if (all(c("x", "xend") %in% names(data))) {
-    if(nrow(data) > 10^5){
+  if (isTRUE(has_x_has_xend)) {
+    if (nrow(data) > 10 ^ 5) {
       warning("data contains >10^5 rows, might be slow to plot")
     }
     return(data)
   }
+  # If no x is provided, behaviours are set to unit width
+  # in the order they appear in the data
+
+  if (isTRUE(no_x)){
+    data <- data %>%
+      dplyr::mutate(x = seq_along(group)) %>%
+      dplyr::mutate(run_id = vctrs::vec_identify_runs(behaviour)) %>%
+      dplyr::group_by(group, run_id) %>%
+      dplyr::summarise(behaviour=unique(behaviour),
+                       # mind xend comes before
+                       xend = last(x),
+                       # x will be overwritten here
+                       x = first(x),
+                       y = unique(y),
+                       yend = unique(yend),
+                       PANEL = unique(PANEL),
+                       colour = unique(colour), .groups = "keep")
+
+  }
+
   # If x is provided but not xend, behaviours are assumed
   # to represent fixed intervals, which will be guessed
   # from the smallest interval between provided values.
   # In future users will be able to manually override
   # this with an explicit value and thus suppress the
   # below warning.
-  if (("x" %in% names(data)) & (! "xend" %in% names(data))) {
-    #print("call has x but no xend")
 
-    data <- do.call("rbind", lapply(split(data, data$y), function(s) {
-
-      s <- s[order(s$x), ]
-      diffs <- diff(s$x)
-      diffs <- diffs[! diffs == 0]
-      interval <- guess_interval(diffs)
-      s$xend <- s$x + interval
-
-      # For efficiency of drawing, runs of identical
-      # behaviours are collapsed. We will first check to
-      # ensure that there are no repeated x values in the
-      # data.
-      if (! length(s$x) == length(unique(s$x))) {
-        warning("Some behaviours will be drawn with the same value for 'x' - is this a mistake?")
-      } else if ("behaviour" %in% names(s)) {
-        #print("aggregating behavior")
-        s$RUN <- vctrs::vec_identify_runs(s$behaviour)
-        s <- do.call("rbind", lapply(split(s, s$RUN), function(run) {
-          run$x <- min(run$x)
-          run$xend <- max(run$xend)
-          run[1, ]
-        }))
-        s$RUN <- NULL
-      }
-      s
-    }
-    ))
-
+  if (isTRUE(has_x_no_xend)) {
+    data <- data %>%
+      dplyr::mutate(run_id = vctrs::vec_identify_runs(behaviour)) %>%
+      dplyr::group_by(group, run_id) %>%
+      dplyr::summarise(behaviour=unique(behaviour),
+                       # mind xend comes before
+                       xend = last(x),
+                       # x will be overwritten here
+                       x = first(x),
+                       y = unique(y),
+                       yend = unique(yend),
+                       PANEL = unique(PANEL),
+                       colour = unique(colour), .groups = "keep")
   }
 
-  # If no x is provided, behaviours are set to unit width
-  # in the order they appear in the data
-  if (! "x" %in% names(data)) {
-    data <- do.call("rbind", lapply(split(data, data$y), function(s) {
-
-      # For efficiency of drawing, runs of identical
-      # behaviours are collapsed 
-      if ("behaviour" %in% names(s)) {
-        s$RUN <- vctrs::vec_identify_runs(s$behaviour)
-        s$x <- seq_along(s$RUN)
-        s <- do.call("rbind", lapply(split(s, s$RUN), function(run) {
-          run$xend <- max(run$x) + 1
-          run$x <- min(run$x)
-          run[1, ]
-        }))
-        s$RUN <- NULL
-      } else {
-        s$xend <- seq_along(s$y)
-        s$x <- s$xend - 1
-      }
-      s
-    }))
-  }
-
-  # Align trials, if so instructed
   if (align_trials) {
-    data <- do.call("rbind", lapply(split(data, data$y), function(s) {
-      zero <- min(s$x)
-      s$x <- s$x - zero
-      s$xend <- s$xend - zero
-      s
-    }))
+    data <- do.call("rbind", lapply(split(data, data$y),
+                                    function(s) {
+                                      zero <- min(s$x)
+                                      s$x <- s$x - zero
+                                      s$xend <- s$xend - zero
+                                      s
+                                    }))
   }
-
   # Remove NA values for colour, unless asked not to. This
   # is intentionally done right at the end, as NA values
   # are considered to be observations where no behaviour
   # was observed (rather than missing observations).
+
   if (remove_nas) {
-    #if ("colour" %in% names(data)) {
-      data <- data[which(! is.na(data$behaviour )), ]
-    #}
+    data <- data[which(!is.na(data$behaviour)),]
   }
-
-  #print(head(data))
   return(data)
-
 }
+
 
 #' @keywords internal
 StatEtho <- ggplot2::ggproto("StatEtho", ggplot2::Stat,
