@@ -54,9 +54,9 @@ compute_ethogram <- function (data, scales, align_trials, remove_nas)
       dplyr::group_by(group, run_id) %>%
       dplyr::summarise(behaviour=unique(behaviour),
                        # mind xend comes before
-                       xend = last(x),
+                       xend = dplyr::last(x),
                        # x will be overwritten here
-                       x = first(x),
+                       x = dplyr::first(x),
                        y = unique(y),
                        yend = unique(yend),
                        PANEL = unique(PANEL),
@@ -77,9 +77,9 @@ compute_ethogram <- function (data, scales, align_trials, remove_nas)
       dplyr::group_by(group, run_id) %>%
       dplyr::summarise(behaviour=unique(behaviour),
                        # mind xend comes before
-                       xend = last(x),
+                       xend = dplyr::last(x),
                        # x will be overwritten here
-                       x = first(x),
+                       x = dplyr::first(x),
                        y = unique(y),
                        yend = unique(yend),
                        PANEL = unique(PANEL),
