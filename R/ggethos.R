@@ -72,12 +72,16 @@ compute_ethogram <- function (data, scales, align_trials, remove_nas)
   # below warning.
 
   if (isTRUE(has_x_no_xend)) {
+
+    # Guess the sampling interval
+    guessed_interval <- guess_interval(abs(diff(data$x)))
+
     data <- data %>%
       dplyr::mutate(run_id = vctrs::vec_identify_runs(behaviour)) %>%
       dplyr::group_by(group, run_id) %>%
       dplyr::summarise(behaviour=unique(behaviour),
                        # mind xend comes before
-                       xend = dplyr::last(x),
+                       xend = dplyr::last(x) + guessed_interval,
                        # x will be overwritten here
                        x = dplyr::first(x),
                        y = unique(y),

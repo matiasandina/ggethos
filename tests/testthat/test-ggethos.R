@@ -122,7 +122,7 @@ testthat::test_that("behaviour mapped to y", {
     geom_ethogram() +
     facet_wrap(trial ~ wombat)
 
-  expect_warning( { print(p) } )
+  expect_message( { print(p) } , regexp = "No\\sobservation\\sinterval")
   # vdiffr::expect_doppelganger("behaviour mapped to y, faceted by trial and wombat", p)
 
 })
