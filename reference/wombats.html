@@ -83,24 +83,25 @@ the way `ggethos` expects data to be given</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> gimli      1 digging             8     8      35 2019-08-28 <span style="color: #949494;">06:37:44</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> gimli      1 digging             9     9      40 2019-08-28 <span style="color: #949494;">06:37:44</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> gimli      1 digging            10    10      45 2019-08-28 <span style="color: #949494;">06:37:44</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 813 more rows, and 2 more variables: start_dt &lt;dttm&gt;, end_dt &lt;dttm&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 813 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 2 more variables: start_dt &lt;dttm&gt;, end_dt &lt;dttm&gt;</span></span>
 <span class="r-in"><span><span class="va">wombats_duration</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 74 × 10</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    wombat trial behaviour start_se…¹ end_s…² exp_dt              trial…³ trial…⁴</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> gimli      1 digging            5      13 2019-08-28 <span style="color: #949494;">06:37:44</span>       0     200</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> gimli      1 pondering         20      33 2019-08-28 <span style="color: #949494;">06:37:44</span>       0     200</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> gimli      1 digging           33      41 2019-08-28 <span style="color: #949494;">06:37:44</span>       0     200</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> gimli      2 snuffling        215     477 2019-08-28 <span style="color: #949494;">06:37:44</span>     205     465</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> gimli      2 digging          217     500 2019-08-28 <span style="color: #949494;">06:37:44</span>     205     465</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> gimli      2 digging          253     518 2019-08-28 <span style="color: #949494;">06:37:44</span>     205     465</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> gimli      3 pondering        481     669 2019-08-28 <span style="color: #949494;">06:37:44</span>     470     650</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> gimli      3 pondering        497     687 2019-08-28 <span style="color: #949494;">06:37:44</span>     470     650</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> gimli      4 digging          655    <span style="text-decoration: underline;">1</span>024 2019-08-28 <span style="color: #949494;">06:37:44</span>     655    <span style="text-decoration: underline;">1</span>020</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> gimli      4 pondering        659    <span style="text-decoration: underline;">1</span>034 2019-08-28 <span style="color: #949494;">06:37:44</span>     655    <span style="text-decoration: underline;">1</span>020</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 64 more rows, 2 more variables: start_dt &lt;dttm&gt;, end_dt &lt;dttm&gt;, and</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   abbreviated variable names ¹​start_seconds, ²​end_seconds, ³​trial_start,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   ⁴​trial_end</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    wombat trial behaviour start_seconds end_seconds exp_dt             </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>             </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> gimli      1 digging               5          13 2019-08-28 <span style="color: #949494;">06:37:44</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> gimli      1 pondering            20          33 2019-08-28 <span style="color: #949494;">06:37:44</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> gimli      1 digging              33          41 2019-08-28 <span style="color: #949494;">06:37:44</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> gimli      2 snuffling           215         477 2019-08-28 <span style="color: #949494;">06:37:44</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> gimli      2 digging             217         500 2019-08-28 <span style="color: #949494;">06:37:44</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> gimli      2 digging             253         518 2019-08-28 <span style="color: #949494;">06:37:44</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> gimli      3 pondering           481         669 2019-08-28 <span style="color: #949494;">06:37:44</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> gimli      3 pondering           497         687 2019-08-28 <span style="color: #949494;">06:37:44</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> gimli      4 digging             655        <span style="text-decoration: underline;">1</span>024 2019-08-28 <span style="color: #949494;">06:37:44</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> gimli      4 pondering           659        <span style="text-decoration: underline;">1</span>034 2019-08-28 <span style="color: #949494;">06:37:44</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 64 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 4 more variables: trial_start &lt;dbl&gt;, trial_end &lt;dbl&gt;, start_dt &lt;dttm&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   end_dt &lt;dttm&gt;</span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
