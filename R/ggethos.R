@@ -49,18 +49,19 @@ compute_ethogram <- function (data, scales, align_trials, remove_nas)
 
   if (isTRUE(no_x)){
     data <- data %>%
-      dplyr::mutate(x = seq_along(group)) %>%
+      dplyr::group_by(PANEL, y) %>%
+      dplyr::mutate(x = seq_along(y)) %>%
       dplyr::mutate(run_id = vctrs::vec_identify_runs(behaviour)) %>%
-      dplyr::group_by(group, run_id) %>%
+      dplyr::group_by(PANEL, y, run_id) %>%
       dplyr::summarise(behaviour=unique(behaviour),
                        # mind xend comes before
-                       xend = dplyr::last(x),
+                       xend = dplyr::last(x) +  1,
                        # x will be overwritten here
                        x = dplyr::first(x),
                        y = unique(y),
                        yend = unique(yend),
                        PANEL = unique(PANEL),
-                       colour = unique(colour), .groups = "keep")
+                       colour = unique(colour), .groups = "keep") 
 
   }
 
