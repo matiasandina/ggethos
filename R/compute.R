@@ -196,8 +196,9 @@ compute_samples_data <- function(data,
 
   summarise_cols <- rlang::list2(
     !!rlang::sym(behaviour_name) := rlang::expr(dplyr::first(!!behaviour_sym)),
-    !!rlang::sym(x_name) := rlang::expr(dplyr::first(!!x_sym)),
+    # Ensure xend uses the original x values (avoid x shadowing in summarise)
     !!rlang::sym(xend_name) := rlang::expr(dplyr::last(!!x_sym) + interval),
+    !!rlang::sym(x_name) := rlang::expr(dplyr::first(!!x_sym)),
     !!rlang::sym(y_name) := rlang::expr(dplyr::first(!!y_sym)),
     !!rlang::sym(yend_name) := rlang::expr(dplyr::first(!!y_sym))
   )
