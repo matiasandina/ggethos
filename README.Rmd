@@ -13,6 +13,15 @@ knitr::opts_chunk$set(
 )
 ```
 
+```{r setup, include = FALSE}
+library(ggplot2)
+if (requireNamespace("devtools", quietly = TRUE)) {
+  devtools::load_all()
+} else {
+  library(ggethos)
+}
+```
+
 # ggethos <a href="https://matiasandina.github.io/ggethos/"><img src="man/figures/logo.png" align="right" height="138" /></a>
 
 <!-- badges: start -->
@@ -45,46 +54,65 @@ devtools::install_github("matiasandina/ggethos")
 ```
 ## Example
 
-This is a basic example of plotting ethograms with `ggethos`:
+There are two supported workflows:
 
-```{r example, message=F, warning=F}
-library(ggplot2)
-library(ggethos)
-library(dplyr)
-wombats %>% 
-  group_by(wombat) %>% 
-  slice(1:2)
-```
-Let's plot the behavior of the wombats 
+1. `geom_ethogram()` computes ethogram segments for you (quick start).
+2. `compute_*()` lets you precompute segments for explicit control and further analysis (recommended for advanced user and complex cases).
 
-```{r}
-# x axis will be in sample space
-ggplot(wombats, aes(y=wombat, behaviour=behaviour)) + geom_ethogram() 
-```
+### Quick start (stat computes)
 
-Let's look at them using a proper x axis and separating by trials:
+`ethogram_demo` is a small deterministic dataset designed to make outputs easy
+to verify.
 
-```{r, warning=FALSE, message=F}
-# x axis will be in seconds
-ggplot(wombats, aes(x=seconds, 
-                    y=wombat, 
-                    behaviour=behaviour,
-                    color=behaviour)) + 
+```{r example-demo, message=FALSE, warning=FALSE}
+ggplot(ethogram_demo,
+       aes(x = seconds, y = subject, behaviour = behaviour, colour = behaviour)) +
   geom_ethogram() +
-  facet_wrap(~trial)
+  facet_wrap(~ trial, labeller = label_both)
 ```
 
-Can we align the trials? Yes! Use `align_trials = TRUE`: 
+### Precompute segments (pipeline)
 
-```{r, warning=FALSE, message=F}
-# x axis will be in seconds
-# trials re-aligned
-ggplot(wombats, aes(x=seconds, 
-                    y=wombat, 
-                    behaviour=behaviour,
-                    color=behaviour)) + 
-  geom_ethogram(align_trials = T) +
-  facet_wrap(~trial)
+When you precompute segments, `geom_ethogram(stat = "identity")` will draw them
+without recomputing. The computed data keeps the original column names and adds
+`*_end` columns plus mapping metadata.
+
+```{r example-pipeline-table, message=FALSE, warning=FALSE}
+seg <- compute_samples(ethogram_demo,
+                       x = seconds,
+                       y = subject,
+                       behaviour = behaviour,
+                       interval = 5)
+
+print(seg, n=Inf)
+```
+
+```{r example-pipeline-plot, message=FALSE, warning=FALSE}
+ggplot() +
+  geom_ethogram(data = seg, aes(colour = behaviour), stat = "identity")
+```
+
+
+### Realistic dataset (wombats)
+
+`wombats` is a larger, more variable dataset with multiple trials and misalignment on acquisition dates.
+
+You can see here that trials were recorded at different times for different wombats.
+
+```{r example-wombats, warning=FALSE, message=FALSE}
+ggplot(wombats, 
+       aes(x = seconds, y = wombat, behaviour = behaviour, color = behaviour)) +
+  geom_ethogram() +
+  facet_wrap(~ trial, labeller = label_both)
+```
+
+In this example, we are aligning trials so that each trial starts at `t0=0`.
+
+```{r example-wombats-align, warning=FALSE, message=FALSE}
+ggplot(wombats, 
+       aes(x = seconds, y = wombat, behaviour = behaviour, color = behaviour)) +
+  geom_ethogram(align_trials = TRUE) +
+  facet_wrap(~ trial, labeller = label_both)
 ```
 
 

@@ -93,3 +93,42 @@ wombats_duration <- wombats_duration %>%
 
 usethis::use_data(wombats_duration, overwrite = TRUE)
 
+# Minimal, deterministic dataset for debugging and documentation
+ethogram_demo <- tibble(
+  subject = rep(c("alpha", "beta"), each = 12),
+  trial = rep(rep(1:2, each = 6), times = 2),
+  frame = rep(1:6, times = 4),
+  seconds = rep(seq(0, by = sampling_period, length.out = 6), times = 4),
+  behaviour = c(
+    "rest", "rest", "move", "move", "eat", "eat",
+    "rest", "move", "rest", "move", "eat", "eat",
+    "move", "move", "move", "rest", "rest", "eat",
+    "eat", "rest", "rest", "move", "move", "move"
+  )
+) %>%
+  group_by(subject, trial) %>%
+  mutate(exp_dt = as_datetime(1600000000 + (cur_group_id() - 1) * 3600),
+         start_dt = exp_dt + dseconds(seconds),
+         end_dt = start_dt + dseconds(sampling_period)) %>%
+  ungroup()
+
+usethis::use_data(ethogram_demo, overwrite = TRUE)
+
+ethogram_demo_duration <- ethogram_demo %>%
+  group_by(subject, trial) %>%
+  summarise(exp_dt = unique(exp_dt),
+            behaviours = list(behaviour),
+            .groups = "drop") %>%
+  mutate(rle = purrr::map(behaviours, rle),
+         behaviours = purrr::map(rle, ~ data.frame(behaviour = .x$values, duration = .x$lengths))) %>%
+  select(-rle) %>%
+  unnest(behaviours) %>%
+  group_by(subject, trial) %>%
+  mutate(end_seconds = cumsum(duration) * sampling_period,
+         start_seconds = end_seconds - duration * sampling_period) %>%
+  ungroup() %>%
+  mutate(start_dt = exp_dt + dseconds(start_seconds),
+         end_dt = exp_dt + dseconds(end_seconds)) %>%
+  select(subject, trial, behaviour, start_seconds, end_seconds, start_dt, end_dt)
+
+usethis::use_data(ethogram_demo_duration, overwrite = TRUE)

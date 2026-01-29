@@ -18,7 +18,12 @@ geom_ethogram(
   show.legend = NA,
   inherit.aes = TRUE,
   align_trials = FALSE,
-  remove_nas = TRUE
+  remove_nas = TRUE,
+  mode = c("auto", "intervals", "samples", "implied"),
+  interval = NULL,
+  interval_mode = c("guess", "explicit"),
+  align_by = NULL,
+  align_mode = c("zero")
 )
 }
 \arguments{
@@ -52,6 +57,16 @@ plot. You must supply `mapping` if there is no plot mapping.}
 \item{align_trials}{boolean indicating whether to align all trials to zero (default = FALSE)}
 
 \item{remove_nas}{boolean indicating whether to remove the `NAs` in the data or not (default = TRUE)}
+
+\item{mode}{one of `"auto"`, `"intervals"`, `"samples"`, `"implied"` to control input mode selection.}
+
+\item{interval}{fixed interval between samples when `mode = "samples"` (optional)}
+
+\item{interval_mode}{use `"explicit"` to require an `interval`, or `"guess"` to infer it}
+
+\item{align_by}{columns used for alignment (optional)}
+
+\item{align_mode}{alignment mode; currently `"zero"` is supported}
 }
 \description{
 `r lifecycle::badge("experimental")` geom_ethogram() calculates the necessary `x` and `xend` (unless provided) to draw ethograms utilizing [ggplot2::geom_segment()]. Calculations are provided by `ggethos:::StatEtho()`, which is kept internal to avoid users having to call `geom_segment()` after `stat_etho()`.
