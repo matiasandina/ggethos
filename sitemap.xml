@@ -1,51 +1,26 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://matiasandina.github.io/ggethos/404.html</loc>
-  </url>
-  <url>
-    <loc>https://matiasandina.github.io/ggethos/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>https://matiasandina.github.io/ggethos/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>https://matiasandina.github.io/ggethos/articles/color.html</loc>
-  </url>
-  <url>
-    <loc>https://matiasandina.github.io/ggethos/articles/examples.html</loc>
-  </url>
-  <url>
-    <loc>https://matiasandina.github.io/ggethos/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>https://matiasandina.github.io/ggethos/articles/installation.html</loc>
-  </url>
-  <url>
-    <loc>https://matiasandina.github.io/ggethos/articles/trials.html</loc>
-  </url>
-  <url>
-    <loc>https://matiasandina.github.io/ggethos/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://matiasandina.github.io/ggethos/index.html</loc>
-  </url>
-  <url>
-    <loc>https://matiasandina.github.io/ggethos/reference/compute_ethogram.html</loc>
-  </url>
-  <url>
-    <loc>https://matiasandina.github.io/ggethos/reference/geom_ethogram.html</loc>
-  </url>
-  <url>
-    <loc>https://matiasandina.github.io/ggethos/reference/guess_interval.html</loc>
-  </url>
-  <url>
-    <loc>https://matiasandina.github.io/ggethos/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://matiasandina.github.io/ggethos/reference/pipe.html</loc>
-  </url>
-  <url>
-    <loc>https://matiasandina.github.io/ggethos/reference/wombats.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://matiasandina.github.io/ggethos/404.html</loc></url>
+<url><loc>https://matiasandina.github.io/ggethos/LICENSE-text.html</loc></url>
+<url><loc>https://matiasandina.github.io/ggethos/LICENSE.html</loc></url>
+<url><loc>https://matiasandina.github.io/ggethos/articles/color.html</loc></url>
+<url><loc>https://matiasandina.github.io/ggethos/articles/examples.html</loc></url>
+<url><loc>https://matiasandina.github.io/ggethos/articles/index.html</loc></url>
+<url><loc>https://matiasandina.github.io/ggethos/articles/installation.html</loc></url>
+<url><loc>https://matiasandina.github.io/ggethos/articles/trials.html</loc></url>
+<url><loc>https://matiasandina.github.io/ggethos/authors.html</loc></url>
+<url><loc>https://matiasandina.github.io/ggethos/index.html</loc></url>
+<url><loc>https://matiasandina.github.io/ggethos/news/index.html</loc></url>
+<url><loc>https://matiasandina.github.io/ggethos/reference/align_ethogram.html</loc></url>
+<url><loc>https://matiasandina.github.io/ggethos/reference/compute_ethogram.html</loc></url>
+<url><loc>https://matiasandina.github.io/ggethos/reference/compute_ethogram_stat.html</loc></url>
+<url><loc>https://matiasandina.github.io/ggethos/reference/compute_implied.html</loc></url>
+<url><loc>https://matiasandina.github.io/ggethos/reference/compute_intervals.html</loc></url>
+<url><loc>https://matiasandina.github.io/ggethos/reference/compute_samples.html</loc></url>
+<url><loc>https://matiasandina.github.io/ggethos/reference/ethogram_demo.html</loc></url>
+<url><loc>https://matiasandina.github.io/ggethos/reference/geom_ethogram.html</loc></url>
+<url><loc>https://matiasandina.github.io/ggethos/reference/guess_interval.html</loc></url>
+<url><loc>https://matiasandina.github.io/ggethos/reference/index.html</loc></url>
+<url><loc>https://matiasandina.github.io/ggethos/reference/pipe.html</loc></url>
+<url><loc>https://matiasandina.github.io/ggethos/reference/wombats.html</loc></url>
 </urlset>
+
