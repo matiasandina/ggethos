@@ -110,10 +110,21 @@ ggplot(wombats,
 
 This article covered the basics of how `geom_ethogram()` handles the `x` axis and the overall philosophy behind this function.
 
+## Demo dataset for visual checks
+
+`ethogram_demo` is a small deterministic dataset designed to make plots easy to
+reason about. Each subject has two trials with short, repeated behaviour runs.
+
+```{r demo-dataset}
+ggplot(ethogram_demo,
+       aes(x = seconds, y = subject, behaviour = behaviour, colour = behaviour)) +
+  geom_ethogram() +
+  facet_wrap(~ trial)
+```
+
 ## Session Info
 
 ```{r session-info}
 sessioninfo::session_info()
 
 ```
-

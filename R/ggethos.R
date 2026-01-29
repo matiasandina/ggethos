@@ -1,123 +1,48 @@
-#' @title Guess Axis Interval
-#' @description `r lifecycle::badge("experimental")` This function guesses the interval using differences in the x axis provided to geom_ethogram().
-#' @keywords internal
-guess_interval <- function(diffs){
-  if (length(diffs) > 0) {
-    interval <- min(diffs)
-    message("No observation interval provided, using guessed interval ",
-            interval
-    )
-  } else {
-    warning("No observation interval provided and unable to guess, some behaviours will not be drawn")
-    interval <- 0
-  }
-  return(interval)
-}
-
 #' @title Compute ethogram
 #' @keywords internal
 #' @description `r lifecycle::badge("experimental")`
 #' @importFrom vctrs vec_identify_runs
 #'
-compute_ethogram <- function (data, scales, align_trials, remove_nas)
-{
-
-  # setup data --------------------------------------------------------------
-  # this can evolve into a setup_data f(x) to handle cases
-  # yend is always y
-  data$yend <- data$y
-  # handle the cases this can evolve to
-  # we could have a switch type of call later
-  has_x_has_xend <- all(c("x", "xend") %in% names(data))
-  has_x_no_xend <- ("x" %in% names(data)) & !("xend" %in% names(data))
-  no_x <- !("x" %in% names(data))
-  has_color <- "colour" %in% names(data)
-  if (isFALSE(has_color)){
-    data$colour <- "black"
-  }
-  # calculate ---------------------------------------------------------------
-  # If x and xend are provided, these values are passed
-  # directly to GeomSegment
-  if (isTRUE(has_x_has_xend)) {
-    if (nrow(data) > 10 ^ 5) {
-      warning("data contains >10^5 rows, might be slow to plot")
-    }
-    return(data)
-  }
-  # If no x is provided, behaviours are set to unit width
-  # in the order they appear in the data
-
-  if (isTRUE(no_x)){
-    data <- data %>%
-      dplyr::group_by(PANEL, y) %>%
-      dplyr::mutate(x = seq_along(y)) %>%
-      dplyr::mutate(run_id = vctrs::vec_identify_runs(behaviour)) %>%
-      dplyr::group_by(PANEL, y, run_id) %>%
-      dplyr::summarise(behaviour=unique(behaviour),
-                       # mind xend comes before
-                       xend = dplyr::last(x) +  1,
-                       # x will be overwritten here
-                       x = dplyr::first(x),
-                       y = unique(y),
-                       yend = unique(yend),
-                       PANEL = unique(PANEL),
-                       colour = unique(colour), .groups = "keep") 
-
-  }
-
-  # If x is provided but not xend, behaviours are assumed
-  # to represent fixed intervals, which will be guessed
-  # from the smallest interval between provided values.
-  # In future users will be able to manually override
-  # this with an explicit value and thus suppress the
-  # below warning.
-
-  if (isTRUE(has_x_no_xend)) {
-
-    # Guess the sampling interval
-    guessed_interval <- guess_interval(abs(diff(data$x)))
-
-    data <- data %>%
-      dplyr::mutate(run_id = vctrs::vec_identify_runs(behaviour)) %>%
-      dplyr::group_by(group, run_id) %>%
-      dplyr::summarise(behaviour=unique(behaviour),
-                       # mind xend comes before
-                       xend = dplyr::last(x) + guessed_interval,
-                       # x will be overwritten here
-                       x = dplyr::first(x),
-                       y = unique(y),
-                       yend = unique(yend),
-                       PANEL = unique(PANEL),
-                       colour = unique(colour), .groups = "keep")
-  }
-
-  if (align_trials) {
-    data <- do.call("rbind", lapply(split(data, data$y),
-                                    function(s) {
-                                      zero <- min(s$x)
-                                      s$x <- s$x - zero
-                                      s$xend <- s$xend - zero
-                                      s
-                                    }))
-  }
-  # Remove NA values for colour, unless asked not to. This
-  # is intentionally done right at the end, as NA values
-  # are considered to be observations where no behaviour
-  # was observed (rather than missing observations).
-
-  if (remove_nas) {
-    data <- data[which(!is.na(data$behaviour)),]
-  }
-  return(data)
+compute_ethogram_stat <- function (data,
+                                   scales,
+                                   align_trials,
+                                   remove_nas,
+                                   mode = c("auto", "intervals", "samples", "implied"),
+                                   interval = NULL,
+                              interval_mode = c("guess", "explicit"),
+                                   align_by = NULL,
+                                   align_mode = c("zero")) {
+  compute_ethogram_data(data,
+                        mode = mode,
+                        interval = interval,
+                        interval_mode = interval_mode,
+                        remove_nas = remove_nas,
+                        align_trials = align_trials,
+                        align_by = align_by,
+                        align_mode = align_mode)
 }
 
 
 #' @keywords internal
 StatEtho <- ggplot2::ggproto("StatEtho", ggplot2::Stat,
-                    compute_panel = function(data, scales, align_trials, remove_nas) {
-                      #print(head(data))
-                      #print(scales)
-                      compute_ethogram(data, scales, align_trials, remove_nas)
+                    compute_panel = function(data,
+                                             scales,
+                                             align_trials,
+                                             remove_nas,
+                                             mode,
+                                             interval,
+                                             interval_mode,
+                                             align_by,
+                                             align_mode) {
+                      compute_ethogram_stat(data,
+                                            scales,
+                                            align_trials,
+                                            remove_nas,
+                                            mode = mode,
+                                            interval = interval,
+                                            interval_mode = interval_mode,
+                                            align_by = align_by,
+                                            align_mode = align_mode)
                       },
                     required_aes = c("y")
 )
@@ -131,6 +56,11 @@ StatEtho <- ggplot2::ggproto("StatEtho", ggplot2::Stat,
 #' @param data Data provided for the plot if not provided through previous `ggplot(data, ...)` layer
 #' @param align_trials boolean indicating whether to align all trials to zero (default = FALSE)
 #' @param remove_nas boolean indicating whether to remove the `NAs` in the data or not (default = TRUE)
+#' @param mode one of `"auto"`, `"intervals"`, `"samples"`, `"implied"` to control input mode selection.
+#' @param interval fixed interval between samples when `mode = "samples"` (optional)
+#' @param interval_mode use `"explicit"` to require an `interval`, or `"guess"` to infer it
+#' @param align_by columns used for alignment (optional)
+#' @param align_mode alignment mode; currently `"zero"` is supported
 #' @param stat The statistical transformation to use on the data for this layer, as a string. The default ("etho") will use `StatEtho` from `ggethos` to plot ethograms by computing the bounds to call [ggplot2::geom_segment()]. Changing this will not generate ethograms.
 #' @param position Position adjustment, either as a string, or the result of a call to a position adjustment function.
 #' @param size Line size. Default=5, increase for thicker ethogram plots.
@@ -156,7 +86,32 @@ geom_ethogram <- function(mapping = NULL,
                           show.legend = NA,
                           inherit.aes = TRUE,
                           align_trials = FALSE,
-                          remove_nas = TRUE) {
+                          remove_nas = TRUE,
+                          mode = c("auto", "intervals", "samples", "implied"),
+                          interval = NULL,
+                          interval_mode = c("guess", "explicit"),
+                          align_by = NULL,
+                          align_mode = c("zero")) {
+
+  if (is.null(mapping)) {
+    mapping <- ggplot2::aes()
+  }
+  map_attr <- if (!is.null(data)) attr(data, "ethogram_mapping") else NULL
+  if (!is.null(map_attr)) {
+    if (!identical(stat, "identity")) {
+      lifecycle::deprecate_warn(
+        when = "0.0.0.9000",
+        what = "Using computed ethogram data with stat != \"identity\"",
+        details = "This data already contains ethogram segments; set `stat = \"identity\"` to avoid recomputation."
+      )
+    }
+    required <- c("x", "xend", "y", "yend")
+    for (key in required) {
+      if (is.null(mapping[[key]]) && !is.null(map_attr[[key]])) {
+        mapping[[key]] <- rlang::new_quosure(rlang::sym(map_attr[[key]]))
+      }
+    }
+  }
 
   ggplot2::layer(
     data = data,
@@ -174,6 +129,11 @@ geom_ethogram <- function(mapping = NULL,
       na.rm = na.rm,
       align_trials = align_trials,
       remove_nas = remove_nas,
+      mode = mode,
+      interval = interval,
+      interval_mode = interval_mode,
+      align_by = align_by,
+      align_mode = align_mode,
       ...
     )
   )
